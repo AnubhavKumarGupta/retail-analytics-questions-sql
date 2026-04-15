@@ -438,3 +438,45 @@ form { padding: 32px 40px 36px; display: flex; flex-direction: column; gap: 24px
   .stat-divider { display: none; }
   .steps-bar .step-label { display: none; }
 }
+
+/* Tables used */
+.table-input-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+#table-input {
+  flex: 1;
+  padding: 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-2);
+  color: var(--text-1);
+}
+
+#add-table-btn {
+  padding: 10px 14px;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+}
+
+.table-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.table-tag {
+  background: rgba(232,197,71,.1);
+  border: 1px solid rgba(232,197,71,.3);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.remove-btn {
+  margin-left: 8px;
+  cursor: pointer;
+  color: red;
+}

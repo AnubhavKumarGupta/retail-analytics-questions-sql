@@ -125,34 +125,14 @@
             Tables Used <span class="required-mark">*</span>
             <span class="field-hint">Select all tables your query references</span>
           </label>
-          <div class="checkbox-grid">
-            <label class="checkbox-item">
-              <input type="checkbox" name="tables" value="fact_sales" />
-              <span class="checkbox-box"></span>
-              <span class="checkbox-label"><code>fact_sales</code></span>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="tables" value="dim_product" />
-              <span class="checkbox-box"></span>
-              <span class="checkbox-label"><code>dim_product</code></span>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="tables" value="dim_store" />
-              <span class="checkbox-box"></span>
-              <span class="checkbox-label"><code>dim_store</code></span>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="tables" value="dim_date" />
-              <span class="checkbox-box"></span>
-              <span class="checkbox-label"><code>dim_date</code></span>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" name="tables" value="dim_customer" />
-              <span class="checkbox-box"></span>
-              <span class="checkbox-label"><code>dim_customer</code></span>
-            </label>
-          </div>
-          <div class="field-error" id="error-tables"></div>
+          <div class="table-input-wrapper">
+			  <input type="text" id="table-input" placeholder="Type table name (e.g. fact_sales)" />
+			  <button type="button" id="add-table-btn">Add</button>
+		  </div>
+
+		  <div id="table-list" class="table-list"></div>
+          
+		  <div class="field-error" id="error-tables"></div>
         </div>
 
         <div class="field-group">

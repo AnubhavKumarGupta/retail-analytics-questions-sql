@@ -39,11 +39,48 @@
 
   // ── Helpers ──────────────────────────────────────────────────
 
-  function getSelectedTables() {
-    return Array.from(
-      document.querySelectorAll('input[name="tables"]:checked')
-    ).map(cb => cb.value);
-  }
+  let tables = [];
+
+  const tableInput = document.getElementById("table-input");
+  const addTableBtn = document.getElementById("add-table-btn");
+  const tableList = document.getElementById("table-list");
+
+  addTableBtn.addEventListener("click", () => {
+    const value = tableInput.value.trim();
+
+    if (!value) return;
+
+    if (!tables.includes(value)) {
+	  tables.push(value);
+	  renderTables();
+    }
+
+    tableInput.value = "";
+  });
+
+  function renderTables() {
+    tableList.innerHTML = "";
+
+    tables.forEach((table, index) => {
+	  const tag = document.createElement("div");
+	  tag.className = "table-tag";
+
+	  tag.innerHTML = `
+	    ${table}
+	    <span class="remove-btn" data-index="${index}">×</span>
+	  `;
+
+    tableList.appendChild(tag);
+  });
+
+  document.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const index = e.target.getAttribute("data-index");
+      tables.splice(index, 1);
+      renderTables();
+    });
+  });
+}
 
   function clearErrors() {
     Object.values(errorEls).forEach(el => {
@@ -81,7 +118,7 @@
       }
     });
 
-    if (getSelectedTables().length === 0) {
+    if (tables.length === 0) {
       errorEls.tables.textContent = 'Please select at least one table.';
       errorEls.tables.classList.add('visible');
       if (valid) document.querySelector('.checkbox-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -124,7 +161,7 @@
       question:       fields.question.value.trim(),
       context:        fields.context.value.trim(),
       business_logic: fields.business_logic.value.trim(),
-      tables_used:    getSelectedTables(),
+      tables_used:    tables,
       sql:            sqlVal || ''
     };
   }
@@ -281,7 +318,7 @@
         item.style.borderColor = '';
         item.style.background  = '';
       }
-      if (getSelectedTables().length > 0) {
+      if (tables.length > 0) {
         errorEls.tables.textContent = '';
         errorEls.tables.classList.remove('visible');
       }
