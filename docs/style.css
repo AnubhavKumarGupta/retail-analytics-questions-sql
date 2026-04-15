@@ -481,8 +481,3 @@ form { padding: 32px 40px 36px; display: flex; flex-direction: column; gap: 24px
   font-weight: bold;
 }
 
-.table-input-wrapper {
-  display: flex;
-  gap: 8px;
-  align-items: center;  
-}
