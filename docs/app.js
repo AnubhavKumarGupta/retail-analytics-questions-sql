@@ -45,42 +45,52 @@
   const addTableBtn = document.getElementById("add-table-btn");
   const tableList = document.getElementById("table-list");
 
-  addTableBtn.addEventListener("click", () => {
+  addTableBtn.addEventListener("click", addTable);
+
+  tableInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addTable();
+    }
+  });
+
+  function addTable() {
     const value = tableInput.value.trim();
 
     if (!value) return;
 
     if (!tables.includes(value)) {
-	  tables.push(value);
-	  renderTables();
+      tables.push(value);
+      renderTables();
     }
 
     tableInput.value = "";
-  });
+  }
 
   function renderTables() {
     tableList.innerHTML = "";
 
     tables.forEach((table, index) => {
-	  const tag = document.createElement("div");
-	  tag.className = "table-tag";
+      const tag = document.createElement("div");
+      tag.className = "table-tag";
 
-	  tag.innerHTML = `
-	    ${table}
-	    <span class="remove-btn" data-index="${index}">×</span>
-	  `;
+      tag.innerHTML = `
+        <span>${table}</span>
+        <span class="remove-btn" data-index="${index}">&times;</span>
+      `;
 
-    tableList.appendChild(tag);
-  });
-
-  document.querySelectorAll(".remove-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const index = e.target.getAttribute("data-index");
-      tables.splice(index, 1);
-      renderTables();
+      tableList.appendChild(tag);
     });
-  });
-}
+
+    // ✅ FIX: bind remove event INSIDE render
+    document.querySelectorAll(".remove-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const index = e.target.getAttribute("data-index");
+        tables.splice(index, 1);
+        renderTables();
+      });
+    });
+  }
 
   function clearErrors() {
     Object.values(errorEls).forEach(el => {
@@ -119,11 +129,11 @@
     });
 
     if (tables.length === 0) {
-      errorEls.tables.textContent = 'Please select at least one table.';
-      errorEls.tables.classList.add('visible');
-      if (valid) document.querySelector('.checkbox-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      valid = false;
-    }
+	  errorEls.tables.textContent = 'Please add at least one table.';
+	  errorEls.tables.classList.add('visible');
+	  tableInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	  valid = false;
+	}
 
     return valid;
   }
