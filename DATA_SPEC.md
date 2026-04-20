@@ -135,73 +135,6 @@ This is the actual payload produced by `buildObj()` and sent through `api.data.c
 }
 ```
 
-### 4.3 JSON Schema (Draft 2020-12)
-
-```json
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/schemas/dataset-payload.schema.json",
-  "title": "DatasetPayload",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "q_id",
-    "domain",
-    "difficulty",
-    "db_type",
-    "instruction",
-    "context",
-    "required_metrics_kpis",
-    "aggregation_logic",
-    "chain_of_thought",
-    "data_model",
-    "sql"
-  ],
-  "properties": {
-    "q_id": { "type": "integer", "minimum": 1 },
-    "domain": { "type": "string", "minLength": 1 },
-    "difficulty": {
-      "type": "string",
-      "enum": ["Easy", "Medium", "Hard", "Expert"]
-    },
-    "db_type": { "type": "string", "minLength": 1 },
-    "instruction": { "type": "string", "minLength": 1 },
-    "context": { "type": "string", "minLength": 1 },
-    "required_metrics_kpis": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "type": "string", "minLength": 1 }
-    },
-    "aggregation_logic": {
-      "type": "object",
-      "minProperties": 1,
-      "additionalProperties": { "type": "string" }
-    },
-    "chain_of_thought": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "string",
-        "pattern": "^Step\\s+\\d+:\\s+.+$"
-      }
-    },
-    "data_model": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["facts", "dims", "hierarchies", "aggrs", "snapshots"],
-      "properties": {
-        "facts": { "type": "string", "minLength": 1 },
-        "dims": { "type": "string", "minLength": 1 },
-        "hierarchies": { "type": "string" },
-        "aggrs": { "type": "string" },
-        "snapshots": { "type": "string" }
-      }
-    },
-    "sql": { "type": "string" }
-  }
-}
-```
-
 ---
 
 ## 5. Validation Rules
@@ -265,7 +198,7 @@ This is the actual payload produced by `buildObj()` and sent through `api.data.c
 
 ---
 
-## 8. Example End-to-End Flow
+## 7. Example End-to-End Flow
 
 1. **User fills form**
    - Difficulty: `Easy`
@@ -293,7 +226,7 @@ This is the actual payload produced by `buildObj()` and sent through `api.data.c
 
 ---
 
-## 9. Edge Cases
+## 8. Edge Cases
 
 | Edge Case | Input Pattern | Expected System Behavior | Risk | Recommended Hardening |
 |---|---|---|---|---|
@@ -308,9 +241,9 @@ This is the actual payload produced by `buildObj()` and sent through `api.data.c
 
 ---
 
-## 10. Copy-Ready Sample Data
+## 9. Copy-Ready Sample Data
 
-### 10.1 Valid Case
+### 9.1 Valid Case
 
 ```json
 {
@@ -342,7 +275,7 @@ This is the actual payload produced by `buildObj()` and sent through `api.data.c
 }
 ```
 
-### 10.2 Invalid Case (missing required fields + enum violation)
+### 9.2 Invalid Case (missing required fields + enum violation)
 
 ```json
 {
@@ -366,7 +299,7 @@ This is the actual payload produced by `buildObj()` and sent through `api.data.c
 }
 ```
 
-### 10.3 Edge Case (form-acceptable but quality-risk)
+### 9.3 Edge Case (form-acceptable but quality-risk)
 
 ```json
 {
@@ -397,14 +330,3 @@ This is the actual payload produced by `buildObj()` and sent through `api.data.c
 **Why edge case:** this can pass parts of current client validation but still produce weak training data (blank custom db type, empty aggregation logic text, generic reasoning).
 
 ---
-
-## Appendix: Storage and Consumption Notes
-
-- Persisted records are stored in local browser storage under `text2sql.datasets`.
-- Record envelope:
-  - top-level: `id`, `domain`, `created_at`
-  - payload: `data_json` (submitted tuple + `submitted_at`)
-- Admin/list/search features consume:
-  - `domain`, `instruction`, `sql` for text search
-  - `difficulty` for filtering
-- Export endpoints/functions emit JSON files for downstream curation pipelines.
